@@ -247,7 +247,7 @@ public:
     // Если перед вставкой значения вектор был заполнен полностью,
     // вместимость вектора должна увеличиться вдвое, а для вектора вместимостью 0 стать равной 1
     Iterator Insert(ConstIterator pos, const Type& value) {
-        assert((pos >= begin() && pos <= end()), true);
+        assert((pos >= begin() && pos <= end()));
         if (size_ == capacity_) {
             size_t temp_capacity = (capacity_ == 0 ? 1 : capacity_ * 2);
             SimpleVector temp_svec(temp_capacity);
@@ -268,7 +268,7 @@ public:
 
     // Вставка с перемещением
     Iterator Insert(Iterator pos, Type&& value) {
-        assert((pos >= begin() && pos <= end()), true);
+        assert((pos >= begin() && pos <= end()));
         if (size_ == capacity_) {
             size_t temp_capacity = (capacity_ == 0 ? 1 : capacity_ * 2);
             SimpleVector temp_svec(temp_capacity);
@@ -296,7 +296,7 @@ public:
 
     // Удаляет элемент вектора в указанной позиции
     Iterator Erase(ConstIterator pos) {
-        assert((pos >= begin() && pos < end()), true);
+        assert((pos >= begin() && pos < end()));
         if (IsEmpty()) {
             return this->end();
         }
