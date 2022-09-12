@@ -64,14 +64,7 @@ public:
     }
 
     // Конструктор с копированием
-    SimpleVector(const SimpleVector& other)  { //new : SimpleVector(other.GetSize())
-        /*if (other.IsEmpty()) {
-            return;
-        }
-        size_t i = 0;
-        for (auto it = std::cbegin(other); it != std::cend(other); ++it) {
-            items_[i++] = *it;
-        }*/
+    SimpleVector(const SimpleVector& other)  { 
         SimpleVector temp(other.GetSize());
         std::copy(other.begin(), other.end(), &temp[0]);
         (*this).swap(temp);
@@ -102,11 +95,13 @@ public:
 
     // Возвращает ссылку на элемент с индексом index
     Type& operator[](size_t index) noexcept {
+        assert((index < size_), true);
         return items_[index];
     }
 
     // Возвращает константную ссылку на элемент с индексом index
     const Type& operator[](size_t index) const noexcept {
+        assert((index < size_), true);
         return items_[index];
     }
 
@@ -252,6 +247,7 @@ public:
     // Если перед вставкой значения вектор был заполнен полностью,
     // вместимость вектора должна увеличиться вдвое, а для вектора вместимостью 0 стать равной 1
     Iterator Insert(ConstIterator pos, const Type& value) {
+        assert((pos >= begin() && pos <= end()), true);
         if (size_ == capacity_) {
             size_t temp_capacity = (capacity_ == 0 ? 1 : capacity_ * 2);
             SimpleVector temp_svec(temp_capacity);
@@ -272,6 +268,7 @@ public:
 
     // Вставка с перемещением
     Iterator Insert(Iterator pos, Type&& value) {
+        assert((pos >= begin() && pos <= end()), true);
         if (size_ == capacity_) {
             size_t temp_capacity = (capacity_ == 0 ? 1 : capacity_ * 2);
             SimpleVector temp_svec(temp_capacity);
@@ -299,6 +296,7 @@ public:
 
     // Удаляет элемент вектора в указанной позиции
     Iterator Erase(ConstIterator pos) {
+        assert((pos >= begin() && pos < end()), true);
         if (IsEmpty()) {
             return this->end();
         }
@@ -306,18 +304,13 @@ public:
         std::move(res + 1, this->end(), res);
         --size_;    
         return res;
-        /*std::move(pos + 1, this->end(), Iterator(pos));
-        --size_;
-        return Iterator(pos);*/
     }
 
     // Обменивает значение с другим вектором
     void swap(SimpleVector& other) noexcept {
         items_.swap(other.items_);
-
-        size_t temp_size = other.size_; size_t temp_capacity = other.capacity_;
-        other.size_ = size_; other.capacity_ = capacity_;
-        size_ = temp_size; capacity_ = temp_capacity;
+        std::swap(other.size_, this->size_);
+        std::swap(other.capacity_, this->capacity_);
     }
 
     void Reserve(size_t new_capacity) {
