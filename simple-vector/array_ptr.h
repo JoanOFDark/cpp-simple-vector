@@ -33,9 +33,8 @@ public:
     ArrayPtr& operator=(ArrayPtr&& rhs) noexcept {
         if (this != &rhs) {
             std::swap(this->raw_ptr_, rhs.raw_ptr_);
-            return this;
         }
-        return 0; //
+        return *this; //
     }
 
     // Запрещаем копирование
