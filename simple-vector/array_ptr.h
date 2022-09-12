@@ -25,22 +25,22 @@ public:
         raw_ptr_ = raw_ptr;
     }
 
-    // Конструктор перемещения
-    //ArrayPtr(ArrayPtr&& other) noexcept {
-    //    this->raw_ptr_ = other.Release();
-    //}
+     //Конструктор перемещения
     ArrayPtr(ArrayPtr&& other) noexcept {
-        raw_ptr_ = other.raw_ptr_;
-        other.Release();
+        this->raw_ptr_ = other.Release();
     }
 
     ArrayPtr& operator=(ArrayPtr&& rhs) noexcept {
-        return raw_ptr_(std::move(rhs));
+        if (this != &rhs) {
+            std::swap(this->raw_ptr_, rhs.raw_ptr_);
+            return this;
+        }
+        return 0; //
     }
 
     // Запрещаем копирование
     ArrayPtr(const ArrayPtr&) = delete;
-
+    
     ~ArrayPtr() {
         // Напишите деструктор самостоятельно
         delete[] raw_ptr_;
